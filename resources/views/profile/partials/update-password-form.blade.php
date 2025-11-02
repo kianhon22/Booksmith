@@ -1,6 +1,6 @@
 <section>
     <header>
-        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+        <h2 class="text-lg font-medium text-black dark:text-gray-100">
             {{ __('Update Password') }}
         </h2>
 
@@ -32,7 +32,7 @@
         </div>
 
         <div class="flex items-center gap-4">
-            <x-button :variant="'primary'">{{ __('Save') }}</x-button>
+            <x-button type="submit" :variant="'primary'">{{ __('Save') }}</x-button>
 
             @if (session('status') === 'password-updated')
                 <p

@@ -24,7 +24,7 @@ class User extends Authenticatable
         'password',
         'phone',
         'business_name',
-        'business_address',
+        'business_registration_number',
         'business_description',
         'is_approved',
         'approved_at',
@@ -39,6 +39,15 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'approved_at'       => 'datetime',
+            'is_approved'       => 'boolean',
+        ];
+    }
 
     public function books()
     {

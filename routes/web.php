@@ -13,13 +13,13 @@ use App\Http\Controllers\PermissionController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 
 Route::middleware(['auth'])->group(function () {
     // Dashboard (both admin and seller)
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/pending', [DashboardController::class, 'pending'])->name('pending');
+    Route::get('/pending', [DashboardController::class, 'pending'])->name('seller.pending');
 
     // Seller Management (admin only)
     Route::get('/sellers', [SellerManagementController::class, 'index'])->name('sellers.index');
@@ -32,13 +32,13 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('categories', CategoryController::class);
 
     // Book Management (admin can manage all, seller can manage own)
-    Route::resource('book-management', BookManagementController::class);
+    Route::resource('book-management', BookManagementController::class)->parameters(['book-management' => 'book']);
 
-    // Books Catalogue (public browsing for authenticated users)
+    // Books Catalogue
     Route::get('/books', [BookController::class, 'index'])->name('books.index');
     Route::get('/books/{book}', [BookController::class, 'show'])->name('books.show');
 
-    // Orders (both roles, different permissions)
+    // Orders (seller only)
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
     Route::patch('/orders/{order}', [OrderController::class, 'update'])->name('orders.update');
@@ -48,7 +48,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Permissions (admin only)
     Route::get('/permissions', [PermissionController::class, 'index'])->name('permissions.index');
-    Route::put('/permissions/{role}', [PermissionController::class, 'update'])->name('permissions.update');
+    Route::put('/permissions', [PermissionController::class, 'update'])->name('permissions.update');
 
     // Documentation
     Route::get('/docs', [DocumentationController::class, 'index'])->name('docs.index');

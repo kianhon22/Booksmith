@@ -20,7 +20,7 @@ class DashboardController extends Controller
 
         if ($user->hasRole('seller')) {
             if (!$user->is_approved) {
-                return redirect()->route('pending');
+                return redirect()->route('seller.pending');
             }
             return $this->sellerDashboard();
         }
@@ -30,36 +30,20 @@ class DashboardController extends Controller
 
     protected function adminDashboard()
     {
+        $totalUsers = User::whereDoesntHave('roles', function ($query) {
+            $query->where('name', 'admin');
+        })->count();
         $totalSellers = User::role('seller')->count();
         $pendingSellers = User::role('seller')->where('is_approved', false)->count();
-        $approvedSellers = User::role('seller')->where('is_approved', true)->count();
-        $totalBooks = Book::count();
         $activeBooks = Book::where('is_active', true)->count();
         $totalOrders = Order::count();
-        $totalRevenue = Order::sum('total');
-        $totalCategories = Category::count();
-
-        $recentOrders = Order::with(['seller', 'items'])
-            ->latest()
-            ->take(5)
-            ->get();
-
-        $recentBooks = Book::with(['seller', 'category'])
-            ->latest()
-            ->take(5)
-            ->get();
 
         return view('dashboard.admin', compact(
             'totalSellers',
             'pendingSellers',
-            'approvedSellers',
-            'totalBooks',
             'activeBooks',
+            'totalUsers',
             'totalOrders',
-            'totalRevenue',
-            'totalCategories',
-            'recentOrders',
-            'recentBooks'
         ));
     }
 
@@ -86,8 +70,8 @@ class DashboardController extends Controller
             ->get();
 
         $lowStockBooks = $seller->books()
-            ->where('stock_quantity', '<=', 5)
-            ->where('stock_quantity', '>', 0)
+            ->where('stock', '<=', 5)
+            ->where('stock', '>', 0)
             ->with('category')
             ->get();
 

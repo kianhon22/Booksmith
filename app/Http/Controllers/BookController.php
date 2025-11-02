@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Book;
 use App\Models\Category;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class BookController extends Controller
 {
@@ -29,7 +28,28 @@ class BookController extends Controller
             $query->where('category_id', $request->category_id);
         }
 
-        $books = $query->latest()->paginate(20);
+        // Handle sorting
+        if ($request->has('sort')) {
+            switch ($request->sort) {
+                case 'title':
+                    $query->orderBy('title', 'asc');
+                    break;
+                case 'price_low':
+                    $query->orderBy('price', 'asc');
+                    break;
+                case 'price_high':
+                    $query->orderBy('price', 'desc');
+                    break;
+                case 'newest':
+                default:
+                    $query->latest();
+                    break;
+            }
+        } else {
+            $query->latest();
+        }
+
+        $books = $query->paginate(20);
         $categories = Category::where('is_active', true)->get();
 
         return view('books.index', compact('books', 'categories'));

@@ -1,12 +1,12 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex items-center">
-            <a href="{{ route('books.index') }}" class="mr-4 text-gray-600 hover:text-gray-900">
+            <a href="{{ route('books.index') }}" class="mr-4 text-gray-600 hover:text-black">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                 </svg>
             </a>
-            <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Add New Book</h2>
+            <h2 class="text-2xl font-bold text-black dark:text-gray-100">Add New Book</h2>
         </div>
     </x-slot>
 
@@ -77,9 +77,9 @@
 
                     <!-- Stock Quantity -->
                     <div>
-                        <x-input-label for="stock_quantity" :value="__('Stock Quantity*')" />
-                        <x-text-input id="stock_quantity" name="stock_quantity" type="number" min="0" class="mt-1 block w-full" :value="old('stock_quantity', 0)" required />
-                        <x-input-error :messages="$errors->get('stock_quantity')" class="mt-2" />
+                        <x-input-label for="stock" :value="__('Stock Quantity*')" />
+                        <x-text-input id="stock" name="stock" type="number" min="0" class="mt-1 block w-full" :value="old('stock', 0)" required />
+                        <x-input-error :messages="$errors->get('stock')" class="mt-2" />
                     </div>
 
                     <!-- Publication Year -->
@@ -113,7 +113,7 @@
                     <!-- Cover Image -->
                     <div class="md:col-span-2">
                         <x-input-label for="cover_image" :value="__('Cover Image')" />
-                        <input id="cover_image" name="cover_image" type="file" accept="image/*" class="mt-1 block w-full text-sm text-gray-900 dark:text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" />
+                        <input id="cover_image" name="cover_image" type="file" accept="image/*" class="mt-1 block w-full text-sm text-black dark:text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" />
                         <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">JPG, PNG, GIF up to 2MB</p>
                         <x-input-error :messages="$errors->get('cover_image')" class="mt-2" />
                     </div>

@@ -47,25 +47,16 @@ class RolePermissionSeeder extends Seeder
         $admin = Role::firstOrCreate(['name' => 'admin']);
         $admin->givePermissionTo([
             'manage-users',
-            'view-users',
             'manage-categories',
-            'view-categories',
-            'manage-books',
-            'view-books',
-            'manage-orders',
-            'view-orders',
+            'manage-books',        
             'approve-sellers',
-            'view-sellers',
             'manage-permissions',
         ]);
 
         $seller = Role::firstOrCreate(['name' => 'seller']);
         $seller->givePermissionTo([
-            'view-categories',
             'manage-books',
-            'view-books',
             'manage-orders',
-            'view-orders',
             'view-analytics',
         ]);
 
@@ -84,7 +75,7 @@ class RolePermissionSeeder extends Seeder
             'email_verified_at' => now(),
             'phone' => '123-456-7890',
             'business_name' => 'John\'s Books',
-            'business_address' => '123 Book Street, Reading City, RC 12345',
+            'business_registration_number' => '123 Book Street, Reading City, RC 12345',
             'business_description' => 'Quality books at affordable prices',
             'is_approved' => true,
             'approved_at' => now(),
@@ -98,7 +89,7 @@ class RolePermissionSeeder extends Seeder
             'email_verified_at' => now(),
             'phone' => '098-765-4321',
             'business_name' => 'Jane\'s Library',
-            'business_address' => '456 Novel Avenue, Story Town, ST 54321',
+            'business_registration_number' => '456 Novel Avenue, Story Town, ST 54321',
             'business_description' => 'Rare and collectible books',
             'is_approved' => true,
             'approved_at' => null,

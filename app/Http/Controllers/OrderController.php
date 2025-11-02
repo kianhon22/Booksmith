@@ -9,7 +9,7 @@ class OrderController extends Controller
 {
     public function index(Request $request)
     {
-        if (auth()->user()->hasRole('admin')) {
+        if (auth()->user()->cannot('manage-orders')) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -24,8 +24,8 @@ class OrderController extends Controller
             });
         }
 
-        if ($request->has('status') && $request->status) {
-            $query->byStatus($request->status);
+        if ($request->has('status') && $request->status !== 'all') {
+            $query->where('status', $request->status);
         }
 
         $orders = $query->latest()->paginate(15);
@@ -35,7 +35,12 @@ class OrderController extends Controller
 
     public function show(Order $order)
     {
-        if (auth()->user()->hasRole('admin')) {
+        if (auth()->user()->cannot('manage-orders')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        // Sellers can only view their own orders
+        if (auth()->user()->hasRole('seller') && $order->seller_id !== auth()->id()) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -46,7 +51,12 @@ class OrderController extends Controller
 
     public function update(Request $request, Order $order)
     {
-        if (auth()->user()->hasRole('admin')) {
+        if (auth()->user()->cannot('manage-orders')) {
+            abort(403, 'Unauthorized action.');
+        }
+        
+        // Sellers can only update their own orders
+        if (auth()->user()->hasRole('seller') && $order->seller_id !== auth()->id()) {
             abort(403, 'Unauthorized action.');
         }
 

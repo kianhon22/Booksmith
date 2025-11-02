@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('phone')->nullable();
             $table->text('business_name')->nullable();
-            $table->text('business_address')->nullable();
+            $table->integer('business_registration_number')->nullable();
             $table->text('business_description')->nullable();
             $table->boolean('is_approved')->default(false);
             $table->timestamp('approved_at')->nullable();

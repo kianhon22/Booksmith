@@ -34,10 +34,10 @@ class RegisteredUserController extends Controller
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'role' => ['required', 'in:seller'],
-            'phone' => ['required_if:role,seller', 'nullable', 'string', 'max:255'],
-            'business_name' => ['required_if:role,seller', 'nullable', 'string', 'max:255'],
-            'business_address' => ['required_if:role,seller', 'nullable', 'string'],
-            'business_description' => ['required_if:role,seller', 'nullable', 'string'],
+            'phone' => ['required', 'nullable', 'string', 'max:255'],
+            'business_name' => ['required', 'nullable', 'string', 'max:255'],
+            'business_registration_number' => ['required', 'nullable', 'integer'],
+            'business_description' => ['required', 'nullable', 'string'],
         ]);
 
         $user = User::create([
@@ -46,7 +46,7 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($validated['password']),
             'phone' => $validated['phone'] ?? null,
             'business_name' => $validated['business_name'] ?? null,
-            'business_address' => $validated['business_address'] ?? null,
+            'business_registration_number' => $validated['business_registration_number'] ?? null,
             'business_description' => $validated['business_description'] ?? null,
             'is_approved' => false, // Sellers need approval
         ]);

@@ -1,59 +1,162 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Booksmith - Book Selling Platform
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A comprehensive Laravel-based book selling platform that enables sellers to manage their book inventory and allows administrators to oversee the entire platform. Built with modern web technologies and best practices.
 
-## About Laravel
+## Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### Admin Features
+- **Seller Management**
+- **Category Management**
+- **Book Management**
+- **Permission Management**
+- **Dashboard Analytics**
+- **Automated Email**
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Seller Features
+- **Book Management**
+- **Order Management**
+- **Sales Analytics**
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Shared Features
+- **Book Catalogue**
+- **Profile Management**
+- **Documentation**
+- **Responsive Design**
 
-## Learning Laravel
+## Technology Stack
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+### Backend
+- **Laravel (PHP)**
+- **MySQL (XAMPP)**
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Frontend
+- **Blade Templates**
+- **Tailwind CSS**
 
-## Laravel Sponsors
+### Key Packages
+- **Laravel Breeze**
+- **Spatie Laravel Permission**
+- **Spatie Laravel Media Library**
+- **Spatie Laravel Sluggable**
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Installation & Setup
 
-### Premium Partners
+### 1. Clone the Repository
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+```bash
+git clone <repository-url>
+cd Booksmith
+```
 
-## Contributing
+### 2. Install PHP Dependencies
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+composer install
+```
 
-## Code of Conduct
+### 3. Install Frontend Dependencies
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+npm install
+```
 
-## Security Vulnerabilities
+### 4. Environment Configuration
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Copy the environment file:
 
-## License
+```bash
+cp .env.example .env
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Generate application key:
+
+```bash
+php artisan key:generate
+```
+
+### 5. Database Configuration
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=booksmith
+DB_USERNAME=your_username
+DB_PASSWORD=your_password
+```
+
+### 6. Run Migrations and Seeders
+
+```bash
+php artisan migrate --seed
+```
+
+This will seed roles (admin, seller) and permissions, create a default admin user, and other sample records.
+
+### 7. Create Storage Link
+
+```bash
+php artisan storage:link
+```
+
+### 8. Build Frontend Assets and Start Server
+
+For development:
+
+```bash
+composer run dev
+```
+
+## Mail Configuration
+
+**For Gmail SMTP:**
+```env
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=your-gmail
+MAIL_PASSWORD=your-google-app-password
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS="hello@example.com"
+MAIL_FROM_NAME="${APP_NAME}"
+```
+
+> **Note**: For Gmail, you need to generate an App Password in your Google Account settings.
+
+## Technical Approach
+
+The application follows Laravel's MVC (Model-View-Controller) architecture.
+
+### Key Design Decisions
+
+1. **Role-Based Views**: Instead of separate admin/seller views, the same views can adapt based on user role
+2. **Media Library**: Spatie Media Library handles book cover uploads with automatic optimization
+3. **Slug URLs**: SEO-friendly URLs for books using Spatie Sluggable
+4. **Permission-Based Access**: Granular permissions allow fine-tuned access control
+
+## Security
+
+1. **Laravel Breeze**: Industry-standard authentication with secure password hashing (bcrypt)
+2. **Spatie Permission**: Role-based access control (RBAC) with granular permissions
+3. **CSRF Protection**: All forms protected with Laravel's CSRF tokens
+4. **Password Hashing**: All passwords hashed using bcrypt
+5. **Input Validation**: Form requests validate all user inputs
+6. **XSS Protection**: Blade templating automatically escapes output
+7. **Mass Assignment Protection**: Only whitelisted fields can be mass-assigned via `$fillable`
+8. **Controller Level**: `cannot()` and `hasRole()` checks in controllers
+
+## Scalability & Optimization
+
+1. **Indexing**: Indexes on frequently queried columns
+2. **Eager Loading**: Uses `with()` or `load()` to prevent N+1 query problems
+3. **Pagination**: All list views use pagination (15 items per page)
+4. **Caching**: Route, Config, Views caching
+
+## User Experience
+
+1. **Consistency**: Unified design language with indigo theme
+2. **Responsiveness**: Mobile-first design using Tailwind CSS
+3. **Visual Feedback**: Loading states, success/error messages
+4. **Intuitive Navigation**: Clear sidebar navigation with role-based menu items
+5. **Status Indicators**: Color-coded badges for order status, seller approval, etc
+6. **Custom Reusable Component**: Standardized and dynamic components to be reused across blades

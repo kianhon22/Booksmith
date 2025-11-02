@@ -3,66 +3,50 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class SalesAnalyticsController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        if (auth()->user()->cannot('view-analytics')) {
+            abort(403, 'Unauthorized action.');
+        }
+        
         $seller = auth()->user();
 
-        // Overall statistics
-        $totalBooks = $seller->books()->count();
-        $totalOrders = $seller->orders()->count();
-        $totalRevenue = $seller->orders()->sum('total');
-        $totalSold = $seller->books()
-            ->join('order_items', 'books.id', '=', 'order_items.book_id')
-            ->join('orders', 'order_items.order_id', '=', 'orders.id')
-            ->sum('order_items.quantity');
+        $startDateInput = $request->input('start_date', now()->subMonths(6)->format('Y-m-d'));
+        $endDateInput = $request->input('end_date', now()->format('Y-m-d'));
 
-        // Revenue by month (last 6 months)
-        $monthlyRevenue = $seller->orders()
-            ->where('created_at', '>=', now()->subMonths(6))
-            ->selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, SUM(total) as revenue, COUNT(*) as orders')
+        $startDate = \Carbon\Carbon::parse($startDateInput)->startOfDay();
+        $endDate = \Carbon\Carbon::parse($endDateInput)->endOfDay();
+
+        // Overall statistics
+        $totalSales = $seller->orders()
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->sum('total');
+        
+        $totalOrders = $seller->orders()
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->count();
+        
+        $averageOrderValue = $totalOrders > 0 ? $totalSales / $totalOrders : 0;
+
+        // Sales over time (by month)
+        $salesOverTime = $seller->orders()
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, SUM(total) as revenue')
             ->groupBy('month')
             ->orderBy('month')
-            ->get();
-
-        // Top selling books
-        $topBooks = $seller->books()
-            ->select('books.*')
-            ->selectRaw('SUM(order_items.quantity) as total_sold, SUM(order_items.total_price) as total_revenue')
-            ->join('order_items', 'books.id', '=', 'order_items.book_id')
-            ->join('orders', 'order_items.order_id', '=', 'orders.id')
-            ->groupBy('books.id')
-            ->orderByDesc('total_sold')
-            ->limit(10)
-            ->with('category')
-            ->get();
-
-        // Orders by status
-        $ordersByStatus = $seller->orders()
-            ->selectRaw('status, COUNT(*) as count')
-            ->groupBy('status')
             ->get()
-            ->pluck('count', 'status');
-
-        // Recent sales activity
-        $recentSales = $seller->orders()
-            ->with('items.book')
-            ->latest()
-            ->take(10)
-            ->get();
+            ->pluck('revenue', 'month');
 
         return view('analytics.index', compact(
-            'totalBooks',
+            'startDate',
+            'endDate',
+            'totalSales',
             'totalOrders',
-            'totalRevenue',
-            'totalSold',
-            'monthlyRevenue',
-            'topBooks',
-            'ordersByStatus',
-            'recentSales'
+            'averageOrderValue',
+            'salesOverTime',
         ));
     }
 }

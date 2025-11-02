@@ -24,7 +24,7 @@ $colorClasses = match($color) {
                     {{ $title }}
                 </dt>
                 <dd class="flex items-baseline">
-                    <div class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
+                    <div class="text-2xl font-semibold text-black dark:text-gray-100">
                         {{ $value }}
                     </div>
                     @if(isset($change))
